@@ -5,29 +5,34 @@ What changed in this project and why, newest first. Add an entry at the top for 
 
 ---
 
-## 2026-11-17: Release 1.1.0
+## 2026-11-17: Release 0.1.1 (renumbered from 1.1.0)
 
 **What**
-- `mod_version` bumped from `1.0.0` to `1.1.0` and tagged `v1.1.0`.
-- Release jar: `build/libs/opl_gg_msa-1.1.0.jar` (42,285 bytes,
-  SHA-256 `7de91f587cc1b54ed09a7c9af447e5dde70d5f6a3017fed3cceed1caa68bea4b`).
+- Version numbering moved into 0.x. The starting skeleton counts as **0.1.0**, and this first release with the
+  tools is **0.1.1**.
+- `mod_version` set to `0.1.1` and tagged `v0.1.1`. The `v1.1.0` tag, pushed a few minutes earlier, was deleted
+  from the local repo and from GitHub. The commit it pointed to stays in history; only its `mod_version` line
+  (`1.1.0`) is superseded.
+- Release jar: `build/libs/opl_gg_msa-0.1.1.jar` (42,286 bytes,
+  SHA-256 `49703d92128077aca0c21e360a7225910d1f79151315055fb6d4f4a1a58c40e2`).
   - The jar is built locally and not committed: `build/` is ignored. Rebuild it from the tag with
     `./gradlew build`.
-- Contents of 1.1.0, compared with the empty 1.0.0 skeleton:
+- Contents of 0.1.1, compared with the empty 0.1.0 skeleton:
   - Red Sword: one-hit kill.
   - Blue Axe: fells whole trees; can be thrown and recalled with an empty-hand right-click.
   - Green Hoe: grows saplings, and turns crops, into trees instantly.
   - Crafting recipes for all three (golden tool centre) with recipe-book unlocks.
 - Requires NeoForge 21.1.267 or newer on Minecraft 1.21.1, on both server and client.
+- `docs/BUILD.md` example version bump changed to match the 0.x numbering.
 
 **Why**
-- Requested. A minor version bump because 1.0.0 was the empty starting skeleton and the three tools are new
-  features.
+- Requested: the mod is early in development, so it uses 0.x versions. The skeleton is 0.1.0 and each update bumps
+  the last number.
 
 **Verified**
 - `./gradlew clean runGameTestServer build`: all 7 game tests pass on a clean build.
 - The jar contains all 11 classes, the 3 textures, models and translations, the 3 recipes and 3 recipe-book unlocks.
-  Its `neoforge.mods.toml` says version `1.1.0`, author Shahrom Ali, NeoForge `[21.1.267,)`, Minecraft
+  Its `neoforge.mods.toml` says version `0.1.1`, author Shahrom Ali, NeoForge `[21.1.267,)`, Minecraft
   `[1.21.1]`.
 - Not checked: installing the jar into a regular (non-development) NeoForge client.
 
@@ -200,7 +205,8 @@ What changed in this project and why, newest first. Add an entry at the top for 
 - Removed all example content (example block, item, creative tab, config) and Forge's bundled
   README, changelog, credits and license files.
 - New mod identity:
-  - Mod ID `opl_gg_msa`, display name "OPL GG", version `1.0.0`
+  - Mod ID `opl_gg_msa`, display name "OPL GG", version `0.1.0` (set as `1.0.0` at the time; renumbered with the
+    0.1.1 release)
   - Package `com.shahromali.opl_gg_msa`
   - Author "Shahrom Ali", license "All Rights Reserved" (unchanged default)
 - Versions:

@@ -76,7 +76,8 @@ Then re-sync the IDE, or run `./gradlew build`.
 
 ## Releasing a build
 
-1. Bump `mod_version` in `gradle.properties` (for example `1.0.0` → `1.1.0`).
+1. Bump `mod_version` in `gradle.properties`. While the mod is in early development it uses 0.x versions and each
+   update bumps the last number (for example `0.1.1` → `0.1.2`).
 2. Add an entry to [IMPLEMENTATION_LOG.md](IMPLEMENTATION_LOG.md).
 3. Run `./gradlew runGameTestServer` (all tests must pass), then `./gradlew build`.
 4. Take `build/libs/opl_gg_msa-<version>.jar`. This is the file to distribute (it does not contain NeoForge or
