@@ -5,6 +5,35 @@ What changed in this project and why, newest first. Add an entry at the top for 
 
 ---
 
+## 2026-11-17: Crafting recipes for all three tools; README summary
+
+**What**
+- Shaped crafting-table recipes in `data/opl_gg_msa/recipe/`. Each one upgrades the matching netherite tool:
+
+  | Tool | Pattern | Key |
+  |---|---|---|
+  | Red Sword | `RNR / RSR / RRR` | R = Block of Redstone, N = Nether Star, S = Netherite Sword |
+  | Blue Axe | `LLL / LAL / LLL` | L = Block of Lapis Lazuli, A = Netherite Axe |
+  | Green Hoe | `BEB / EHE / BEB` | B = Bone Block, E = Block of Emerald, H = Netherite Hoe |
+
+- Recipe-book unlocks in `data/opl_gg_msa/advancement/recipes/{combat,tools}/`. Each recipe appears once the player
+  has the matching netherite tool, the same way vanilla unlocks its recipes.
+- README rewritten with a player-facing summary of the mod: what each tool does, the crop-to-tree table,
+  recipes, and how to install. Developer info moved below that.
+
+**Why**
+- Requested: crafting recipes for all three tools, and a summary of the mod in the README.
+- Building on netherite tools matches their netherite tier and keeps them late-game. The Red Sword also needs a
+  Nether Star (from the Wither), because a guaranteed one-hit kill is the strongest effect of the three.
+- Colours match the tools: redstone for red, lapis for blue, emerald for green. The bone blocks on the hoe hint at
+  bone meal.
+
+**Verified**
+- `./gradlew runGameTestServer`: all 7 tests pass. The new `toolRecipesCraftTheTools` test runs each 3x3 grid
+  through the server's recipe manager, checks the right tool comes out, and checks each recipe-book unlock is
+  loaded. The server log shows no recipe or advancement loading errors.
+- Not checked by hand in the client: the recipe book showing the recipes.
+
 ## 2026-11-17: Green Hoe turns crops into trees; Blue Axe can be thrown and recalled
 
 **What**

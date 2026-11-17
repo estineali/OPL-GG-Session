@@ -61,7 +61,7 @@ and build again.
 | `src/main/templates/META-INF/neoforge.mods.toml` | Mod metadata template. Values in `${...}` are filled from `gradle.properties` at build time. Edit this file, not a copy in `build/`. |
 | `src/main/java/com/shahromali/opl_gg_msa/` | Mod source code |
 | `src/main/resources/assets/opl_gg_msa/` | Textures, models, language files |
-| `src/main/resources/data/opl_gg_msa/` | Recipes, loot tables, tags; `structure/empty.nbt` is the game-test arena |
+| `src/main/resources/data/opl_gg_msa/` | `recipe/` crafting recipes, `advancement/recipes/` recipe-book unlocks, `structure/empty.nbt` the game-test arena |
 | `scripts/gen_tool_textures.py` | Draws the tool textures. Edit the character grids or colours, then run `python3 scripts/gen_tool_textures.py` (Python 3, no extra packages). |
 
 ### Updating versions

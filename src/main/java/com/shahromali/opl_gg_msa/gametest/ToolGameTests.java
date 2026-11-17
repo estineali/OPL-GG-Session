@@ -14,7 +14,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.RecipeType;
+import java.util.List;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
@@ -152,6 +158,42 @@ public class ToolGameTests {
                 helper.assertTrue(axe.isRemoved(), "Thrown axe entity still exists after pickup");
             });
         });
+    }
+
+    /** Each tool's crafting recipe loads, produces the tool, and has a recipe-book unlock. */
+    @GameTest(template = EMPTY)
+    public static void toolRecipesCraftTheTools(GameTestHelper helper) {
+        ItemStack redstone = new ItemStack(Items.REDSTONE_BLOCK);
+        ItemStack lapis = new ItemStack(Items.LAPIS_BLOCK);
+        ItemStack emerald = new ItemStack(Items.EMERALD_BLOCK);
+        ItemStack bone = new ItemStack(Items.BONE_BLOCK);
+
+        assertCrafts(helper, "red_sword", ModItems.RED_SWORD.get(),
+                redstone, new ItemStack(Items.NETHER_STAR), redstone,
+                redstone, new ItemStack(Items.NETHERITE_SWORD), redstone,
+                redstone, redstone, redstone);
+        assertCrafts(helper, "blue_axe", ModItems.BLUE_AXE.get(),
+                lapis, lapis, lapis,
+                lapis, new ItemStack(Items.NETHERITE_AXE), lapis,
+                lapis, lapis, lapis);
+        assertCrafts(helper, "green_hoe", ModItems.GREEN_HOE.get(),
+                bone, emerald, bone,
+                emerald, new ItemStack(Items.NETHERITE_HOE), emerald,
+                bone, emerald, bone);
+        helper.succeed();
+    }
+
+    private static void assertCrafts(GameTestHelper helper, String name, Item expected, ItemStack... grid) {
+        ServerLevel level = helper.getLevel();
+        CraftingInput input = CraftingInput.of(3, 3, List.of(grid));
+        ItemStack result = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level)
+                .map(recipe -> recipe.value().assemble(input, level.registryAccess()))
+                .orElse(ItemStack.EMPTY);
+        helper.assertTrue(result.is(expected), "Recipe for " + name + " produced " + result);
+
+        String category = expected == ModItems.RED_SWORD.get() ? "combat" : "tools";
+        ResourceLocation unlock = ResourceLocation.fromNamespaceAndPath(OplGgMsa.MODID, "recipes/" + category + "/" + name);
+        helper.assertTrue(level.getServer().getAdvancements().get(unlock) != null, "Missing recipe unlock " + unlock);
     }
 
     private static void useHoeOn(GameTestHelper helper, BlockPos relativePos) {

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:bone_block"
+    },
+    "E": {
+      "item": "minecraft:emerald_block"
+    },
+    "H": {
+      "item": "minecraft:netherite_hoe"
+    }
+  },
+  "pattern": [
+    "BEB",
+    "EHE",
+    "BEB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "opl_gg_msa:green_hoe"
+  }
+}
