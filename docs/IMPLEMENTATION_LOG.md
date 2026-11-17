@@ -24,6 +24,9 @@ What changed in this project and why, newest first. Add an entry at the top for 
   - Crafting recipes for all three (golden tool centre) with recipe-book unlocks.
 - Requires NeoForge 21.1.267 or newer on Minecraft 1.21.1, on both server and client.
 - `docs/BUILD.md` example version bump changed to match the 0.x numbering.
+- Published as a GitHub Release, "OPL GG 0.1.1", with the jar attached:
+  https://github.com/estineali/OPL-GG-Session/releases/tag/v0.1.1. The release notes cover the tools, recipes,
+  install steps and the jar's SHA-256. GitHub's checksum for the uploaded jar matches the local build.
 
 **Why**
 - Requested: the mod is early in development, so it uses 0.x versions. The skeleton is 0.1.0 and each update bumps
