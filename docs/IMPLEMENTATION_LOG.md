@@ -5,6 +5,32 @@ What changed in this project and why, newest first. Add an entry at the top for 
 
 ---
 
+## 2026-11-17: Release 1.1.0
+
+**What**
+- `mod_version` bumped from `1.0.0` to `1.1.0` and tagged `v1.1.0`.
+- Release jar: `build/libs/opl_gg_msa-1.1.0.jar` (42,285 bytes,
+  SHA-256 `7de91f587cc1b54ed09a7c9af447e5dde70d5f6a3017fed3cceed1caa68bea4b`).
+  - The jar is built locally and not committed: `build/` is ignored. Rebuild it from the tag with
+    `./gradlew build`.
+- Contents of 1.1.0, compared with the empty 1.0.0 skeleton:
+  - Red Sword: one-hit kill.
+  - Blue Axe: fells whole trees; can be thrown and recalled with an empty-hand right-click.
+  - Green Hoe: grows saplings, and turns crops, into trees instantly.
+  - Crafting recipes for all three (golden tool centre) with recipe-book unlocks.
+- Requires NeoForge 21.1.267 or newer on Minecraft 1.21.1, on both server and client.
+
+**Why**
+- Requested. A minor version bump because 1.0.0 was the empty starting skeleton and the three tools are new
+  features.
+
+**Verified**
+- `./gradlew clean runGameTestServer build`: all 7 game tests pass on a clean build.
+- The jar contains all 11 classes, the 3 textures, models and translations, the 3 recipes and 3 recipe-book unlocks.
+  Its `neoforge.mods.toml` says version `1.1.0`, author Shahrom Ali, NeoForge `[21.1.267,)`, Minecraft
+  `[1.21.1]`.
+- Not checked: installing the jar into a regular (non-development) NeoForge client.
+
 ## 2026-11-17: Recipes use golden tools instead of netherite
 
 **What**
