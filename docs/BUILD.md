@@ -36,7 +36,7 @@ Parchment parameter names. Later builds take seconds. The mod jar ends up in `bu
 |---|---|---|
 | `./gradlew runClient` | Starts the game with the mod loaded | `run/` |
 | `./gradlew runServer` | Starts a dedicated server (no GUI). First run: set `eula=true` in `run/eula.txt` and run again. | `run/` |
-| `./gradlew runGameTestServer` | Boots a server, runs the mod's game tests, exits. **Fails with "No test functions were given!" until the mod registers at least one game test.** | `run/` |
+| `./gradlew runGameTestServer` | Boots a headless server, runs the mod's game tests (`src/main/java/.../gametest/`), prints "All N required tests passed", and exits. Run it before every release. | `run/` |
 | `./gradlew runData` | Runs data generators, writing to `src/generated/resources/` | `run/` |
 
 `run/` is ignored by git: worlds, configs and logs you create while testing stay local.
@@ -61,7 +61,8 @@ and build again.
 | `src/main/templates/META-INF/neoforge.mods.toml` | Mod metadata template. Values in `${...}` are filled from `gradle.properties` at build time. Edit this file, not a copy in `build/`. |
 | `src/main/java/com/shahromali/opl_gg_msa/` | Mod source code |
 | `src/main/resources/assets/opl_gg_msa/` | Textures, models, language files |
-| `src/main/resources/data/opl_gg_msa/` | Recipes, loot tables, tags (create when needed) |
+| `src/main/resources/data/opl_gg_msa/` | Recipes, loot tables, tags; `structure/empty.nbt` is the game-test arena |
+| `scripts/gen_tool_textures.py` | Draws the tool textures. Edit the character grids or colours, then run `python3 scripts/gen_tool_textures.py` (Python 3, no extra packages). |
 
 ### Updating versions
 
@@ -77,7 +78,7 @@ Then re-sync the IDE, or run `./gradlew build`.
 
 1. Bump `mod_version` in `gradle.properties` (for example `1.0.0` → `1.1.0`).
 2. Add an entry to [IMPLEMENTATION_LOG.md](IMPLEMENTATION_LOG.md).
-3. Run `./gradlew build`.
+3. Run `./gradlew runGameTestServer` (all tests must pass), then `./gradlew build`.
 4. Take `build/libs/opl_gg_msa-<version>.jar`. This is the file to distribute (it does not contain NeoForge or
    Minecraft).
 5. Commit, tag (`git tag v<version>`) and push the tag.
@@ -104,5 +105,5 @@ A red check means the mod no longer compiles.
 | `Unsupported class file major version` or toolchain errors | Make sure Gradle can download Java 21 (network/proxy), or install a JDK 21 yourself. |
 | Gradle runs out of memory on first build | Raise `org.gradle.jvmargs` in `gradle.properties` (e.g. `-Xmx3G`). |
 | Strange cache or configuration-cache errors after changing versions | `./gradlew --stop`, then delete `build/` and `.gradle/` and rebuild. |
-| `runGameTestServer` fails with "No test functions were given!" | Expected until the mod has game tests. |
+| `runGameTestServer` reports a failed test | Open `run/logs/latest.log` and search for the test name; the failure message says what was wrong. |
 | Purple/black textures in game | Missing model or texture under `src/main/resources/assets/opl_gg_msa/`. |

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "opl_gg_msa:item/blue_axe"
+  }
+}

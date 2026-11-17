@@ -1,6 +1,7 @@
 package com.shahromali.opl_gg_msa;
 
 import com.mojang.logging.LogUtils;
+import com.shahromali.opl_gg_msa.item.ModItems;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -16,6 +17,7 @@ public class OplGgMsa {
     // NeoForge injects the mod event bus and container into the constructor.
     public OplGgMsa(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
+        ModItems.register(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
