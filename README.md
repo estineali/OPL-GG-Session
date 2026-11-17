@@ -44,14 +44,14 @@ Right-click a planted seed and it instantly grows into a tree:
 - On dirt or grass it tills like a normal hoe.
 
 ### Crafting
-Each tool is an upgrade of its netherite version, crafted on a crafting table. The recipe shows up in the recipe
-book once you have the netherite tool.
+Each tool is an upgrade of its golden version, crafted on a crafting table. The recipe shows up in the recipe
+book once you have the golden tool.
 
 | Tool | Recipe |
 |---|---|
-| Red Sword | Netherite Sword in the centre, a Nether Star above it, Blocks of Redstone in the other 7 slots |
-| Blue Axe | Netherite Axe in the centre, Blocks of Lapis Lazuli in the 8 slots around it |
-| Green Hoe | Netherite Hoe in the centre, Blocks of Emerald on the 4 sides, Bone Blocks in the 4 corners |
+| Red Sword | Golden Sword in the centre, a Nether Star above it, Blocks of Redstone in the other 7 slots |
+| Blue Axe | Golden Axe in the centre, Blocks of Lapis Lazuli in the 8 slots around it |
+| Green Hoe | Golden Hoe in the centre, Blocks of Emerald on the 4 sides, Bone Blocks in the 4 corners |
 
 ```
 Red Sword        Blue Axe         Green Hoe
@@ -60,7 +60,8 @@ R S R            L A L            E H E
 R R R            L L L            B E B
 ```
 
-All three are netherite-tier (2031 durability), don't burn in lava, and have purple names. In creative they're in
+However they're crafted, all three are as strong as netherite tools (2031 durability), don't burn in lava, and
+have purple names. In creative they're in
 the Combat tab (sword) and Tools & Utilities tab (axe, hoe), or use `/give @s opl_gg_msa:red_sword`
 (or `blue_axe`, `green_hoe`).
 

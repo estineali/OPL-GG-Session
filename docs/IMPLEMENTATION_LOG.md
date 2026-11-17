@@ -5,6 +5,30 @@ What changed in this project and why, newest first. Add an entry at the top for 
 
 ---
 
+## 2026-11-17: Recipes use golden tools instead of netherite
+
+**What**
+- The centre of each recipe is now the golden tool instead of the netherite one:
+
+  | Tool | Pattern | Key |
+  |---|---|---|
+  | Red Sword | `RNR / RSR / RRR` | R = Block of Redstone, N = Nether Star, S = **Golden Sword** |
+  | Blue Axe | `LLL / LAL / LLL` | L = Block of Lapis Lazuli, A = **Golden Axe** |
+  | Green Hoe | `BEB / EHE / BEB` | B = Bone Block, E = Block of Emerald, H = **Golden Hoe** |
+
+- Recipe-book unlocks now trigger when the player has the golden tool.
+- The crafted tools are unchanged: still netherite-tier stats (2031 durability, netherite mining speed), fire
+  resistant, Epic rarity.
+- README crafting section updated to match.
+
+**Why**
+- Requested. Golden tools are far cheaper than netherite ones, so the Blue Axe and Green Hoe can be made early
+  (no Nether trip needed past the materials). The Red Sword still needs a Nether Star, so it stays late-game.
+
+**Verified**
+- `./gradlew runGameTestServer`: all 7 tests pass. `toolRecipesCraftTheTools` now crafts with golden tools.
+- Not checked by hand in the client: the recipe book.
+
 ## 2026-11-17: Crafting recipes for all three tools; README summary
 
 **What**

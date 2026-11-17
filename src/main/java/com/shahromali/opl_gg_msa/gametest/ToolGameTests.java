@@ -170,15 +170,15 @@ public class ToolGameTests {
 
         assertCrafts(helper, "red_sword", ModItems.RED_SWORD.get(),
                 redstone, new ItemStack(Items.NETHER_STAR), redstone,
-                redstone, new ItemStack(Items.NETHERITE_SWORD), redstone,
+                redstone, new ItemStack(Items.GOLDEN_SWORD), redstone,
                 redstone, redstone, redstone);
         assertCrafts(helper, "blue_axe", ModItems.BLUE_AXE.get(),
                 lapis, lapis, lapis,
-                lapis, new ItemStack(Items.NETHERITE_AXE), lapis,
+                lapis, new ItemStack(Items.GOLDEN_AXE), lapis,
                 lapis, lapis, lapis);
         assertCrafts(helper, "green_hoe", ModItems.GREEN_HOE.get(),
                 bone, emerald, bone,
-                emerald, new ItemStack(Items.NETHERITE_HOE), emerald,
+                emerald, new ItemStack(Items.GOLDEN_HOE), emerald,
                 bone, emerald, bone);
         helper.succeed();
     }

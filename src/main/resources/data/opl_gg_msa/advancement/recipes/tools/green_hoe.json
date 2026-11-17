@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_netherite_hoe": {
+    "has_golden_hoe": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:netherite_hoe"
+            "items": "minecraft:golden_hoe"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_netherite_hoe"
+      "has_golden_hoe"
     ]
   ],
   "rewards": {
