@@ -5,6 +5,62 @@ What changed in this project and why, newest first. Add an entry at the top for 
 
 ---
 
+## 2026-11-17: Green Hoe turns crops into trees; Blue Axe can be thrown and recalled
+
+**What**
+- **Green Hoe, crops → trees.** Right-clicking a planted crop now turns it into a tree instead of maturing it:
+
+  | Crop | Tree |
+  |---|---|
+  | Wheat | Oak |
+  | Carrots | Acacia |
+  | Potatoes | Birch |
+  | Beetroot | Cherry |
+  | Melon stem | Jungle |
+  | Pumpkin stem | Spruce |
+  | Torchflower | Flowering azalea |
+  | Anything else (e.g. other mods' crops) | Oak |
+
+  - Farmland under the crop turns into dirt so the tree can root.
+  - If the tree has no room, the crop and farmland are put back exactly as they were and no durability is used.
+  - Saplings, fungi and mushrooms work as before.
+- **Blue Axe, throwing.**
+  - Right-click in the air, or on a block it can't strip, to throw it. It costs 1 durability and empties the hand,
+    in creative too.
+  - It flies like a trident, tumbling end over end, and deals 12 damage with knockback to the first thing it hits.
+    Then it drops and sticks into the block it lands on.
+  - Right-click with an empty main hand, in the air or on a block, and every Blue Axe you have thrown in that
+    dimension flies back like a Loyalty III trident and goes into your inventory (or drops at your feet if the
+    inventory is full). You can also walk over a stuck axe to pick it up.
+  - A thrown axe never despawns. If it falls out of the world it returns on its own. If its owner is dead, offline
+    in another dimension, or in spectator mode when it is recalled, it drops as an item instead.
+  - Right-clicking logs still strips them, like any axe.
+- New code:
+  - `entity/ThrownBlueAxe` (the flying axe, modelled on vanilla's thrown trident)
+  - `entity/ModEntities` (registers it as `opl_gg_msa:thrown_blue_axe`)
+  - `client/ThrownBlueAxeRenderer` (draws the axe's item sprite spinning in flight, blade-first when stuck)
+  - `network/RecallAxePayload`
+- `RecallAxePayload` is a client → server message sent when the player right-clicks the air with an empty hand;
+  the server can't detect that click on its own. Empty-hand clicks on blocks are caught on the server directly.
+- The client entrypoint now registers its listeners explicitly in its constructor instead of through
+  `@EventBusSubscriber`, so mod-bus and game-bus events are each wired to the right bus.
+
+**Why**
+- Requested: crop seeds should grow into trees; the axe should be throwable and come back on right-click.
+- Built on vanilla's trident code for flight, sticking, pickup and Loyalty-style return, because that behaviour is
+  proven and familiar to players.
+- Removing the axe from the hand on throw, creative included, means the empty-hand right-click that recalls it is
+  always available.
+
+**Verified**
+- `./gradlew runGameTestServer`: all 6 tests pass. New or changed tests:
+  - Wheat on farmland becomes an oak tree with leaves, and the farmland is no longer there.
+  - Wheat under a stone ceiling stays wheat on farmland.
+  - The Blue Axe thrown straight down leaves the hand empty, sticks in the ground, is found by a recall, flies back
+    to the thrower, and ends up in their inventory with the flying entity gone.
+- Not checked by hand in the client yet: how the flying axe looks, sounds, and the empty-hand right-click in the air
+  (the client → server message). Tests run on a headless server, so they don't cover rendering or that message.
+
 ## 2026-11-17: Red Sword, Blue Axe and Green Hoe
 
 **What**

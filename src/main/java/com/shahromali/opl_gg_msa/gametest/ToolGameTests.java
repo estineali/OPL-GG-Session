@@ -1,6 +1,8 @@
 package com.shahromali.opl_gg_msa.gametest;
 
 import com.shahromali.opl_gg_msa.OplGgMsa;
+import com.shahromali.opl_gg_msa.entity.ModEntities;
+import com.shahromali.opl_gg_msa.entity.ThrownBlueAxe;
 import com.shahromali.opl_gg_msa.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -89,22 +91,74 @@ public class ToolGameTests {
         helper.succeed();
     }
 
-    /** Right-clicking a freshly planted crop grows it to full maturity. */
+    /** Right-clicking freshly planted wheat turns it into an oak tree; the farmland under it becomes soil. */
     @GameTest(template = EMPTY)
-    public static void greenHoeMaturesCrops(GameTestHelper helper) {
+    public static void greenHoeTurnsWheatIntoOakTree(GameTestHelper helper) {
         BlockPos crop = new BlockPos(7, 1, 7);
         helper.setBlock(crop.below(), Blocks.FARMLAND);
         helper.setBlock(crop, Blocks.WHEAT);
 
-        Player player = playerHolding(helper, new ItemStack(ModItems.GREEN_HOE.get()));
-        BlockPos absCrop = helper.absolutePos(crop);
-        ModItems.GREEN_HOE.get().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
-                new BlockHitResult(Vec3.atCenterOf(absCrop), Direction.UP, absCrop, false)));
+        useHoeOn(helper, crop);
 
-        BlockState state = helper.getBlockState(crop);
-        helper.assertTrue(state.getBlock() instanceof net.minecraft.world.level.block.CropBlock c && c.isMaxAge(state),
-                "Wheat is not fully grown");
+        helper.assertBlockPresent(Blocks.OAK_LOG, crop);
+        helper.assertBlockNotPresent(Blocks.FARMLAND, crop.below());
+        helper.assertTrue(count(helper, Blocks.OAK_LEAVES) > 0, "Oak tree has no leaves");
         helper.succeed();
+    }
+
+    /** With no room for a tree (a ceiling two blocks up), the crop and farmland are left exactly as they were. */
+    @GameTest(template = EMPTY)
+    public static void greenHoeLeavesCropAloneWithoutRoom(GameTestHelper helper) {
+        BlockPos crop = new BlockPos(7, 1, 7);
+        helper.setBlock(crop.below(), Blocks.FARMLAND);
+        helper.setBlock(crop, Blocks.WHEAT);
+        helper.setBlock(crop.above(2), Blocks.STONE);
+
+        useHoeOn(helper, crop);
+
+        helper.assertBlockPresent(Blocks.WHEAT, crop);
+        helper.assertBlockPresent(Blocks.FARMLAND, crop.below());
+        helper.succeed();
+    }
+
+    /**
+     * Throwing the axe empties the hand and launches it; it sticks in the ground; recalling it brings it back to
+     * the thrower, who gets it back in their inventory.
+     */
+    @GameTest(template = EMPTY, timeoutTicks = 200)
+    public static void blueAxeThrowsSticksAndReturns(GameTestHelper helper) {
+        for (BlockPos pos : BlockPos.betweenClosed(new BlockPos(4, 0, 4), new BlockPos(10, 0, 10))) {
+            helper.setBlock(pos, Blocks.DIRT);
+        }
+        Player player = playerHolding(helper, new ItemStack(ModItems.BLUE_AXE.get()));
+        Vec3 standAt = helper.absoluteVec(new Vec3(7.5, 4.0, 7.5));
+        player.moveTo(standAt.x, standAt.y, standAt.z, 0.0F, 90.0F); // looking straight down
+
+        ModItems.BLUE_AXE.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+
+        helper.assertTrue(player.getMainHandItem().isEmpty(), "Hand still holds the axe after throwing");
+        var thrown = helper.getLevel().getEntities(ModEntities.THROWN_BLUE_AXE.get(), axe -> axe.getOwner() == player);
+        helper.assertTrue(thrown.size() == 1, "Expected 1 thrown axe, found " + thrown.size());
+        ThrownBlueAxe axe = thrown.get(0);
+
+        helper.runAfterDelay(30, () -> {
+            helper.assertFalse(axe.isSpinning(), "Thrown axe did not stick in the ground");
+            helper.assertTrue(ThrownBlueAxe.recallAll(player) == 1, "Recall did not find the thrown axe");
+            helper.succeedWhen(() -> {
+                helper.assertTrue(axe.distanceTo(player) < 1.5, "Axe has not flown back yet");
+                axe.playerTouch(player); // mock players don't tick, so trigger the pickup a real player would
+                helper.assertTrue(player.getInventory().hasAnyMatching(stack -> stack.is(ModItems.BLUE_AXE.get())),
+                        "Axe did not return to the inventory");
+                helper.assertTrue(axe.isRemoved(), "Thrown axe entity still exists after pickup");
+            });
+        });
+    }
+
+    private static void useHoeOn(GameTestHelper helper, BlockPos relativePos) {
+        Player player = playerHolding(helper, new ItemStack(ModItems.GREEN_HOE.get()));
+        BlockPos pos = helper.absolutePos(relativePos);
+        ModItems.GREEN_HOE.get().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND,
+                new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)));
     }
 
     /** A survival mock player holding {@code stack}, with the item's attack attributes applied. */

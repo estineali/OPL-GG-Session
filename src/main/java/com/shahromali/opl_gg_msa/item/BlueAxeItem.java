@@ -1,6 +1,13 @@
 package com.shahromali.opl_gg_msa.item;
 
+import com.shahromali.opl_gg_msa.entity.ThrownBlueAxe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -33,6 +40,8 @@ import java.util.Set;
  *
  * <p>Only natural trees are felled: the connected logs must touch natural (non-player-placed) leaves or wart blocks.
  * Player-built log structures break one block at a time, as does any log broken while sneaking.
+ *
+ * <p>It can also be thrown; see {@link #use} and {@link ThrownBlueAxe}.
  */
 public class BlueAxeItem extends AxeItem {
     private static final int MAX_LOGS = 1024;
@@ -42,6 +51,28 @@ public class BlueAxeItem extends AxeItem {
 
     public BlueAxeItem(Properties properties) {
         super(Tiers.NETHERITE, properties.attributes(AxeItem.createAttributes(Tiers.NETHERITE, 5.0F, -3.0F)));
+    }
+
+    /**
+     * Right-click (in the air, or on a block the axe can't strip) throws the axe. It costs 1 durability and leaves the
+     * hand empty, even in creative, so an empty-hand right-click can call it back.
+     */
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!level.isClientSide()) {
+            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+            if (stack.isEmpty()) {
+                return InteractionResultHolder.consume(stack); // broke on this throw
+            }
+            ThrownBlueAxe axe = ThrownBlueAxe.throwFrom(level, player, stack);
+            level.addFreshEntity(axe);
+            level.playSound(null, axe, SoundEvents.TRIDENT_THROW.value(), SoundSource.PLAYERS, 1.0F, 0.8F);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            player.setItemInHand(hand, ItemStack.EMPTY);
+            return InteractionResultHolder.consume(ItemStack.EMPTY);
+        }
+        return InteractionResultHolder.success(stack);
     }
 
     @Override
